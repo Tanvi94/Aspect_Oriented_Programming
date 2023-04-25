@@ -20,9 +20,12 @@ public class MainDemoApp {
 		//call the business method
 		theAccountDAO.addAccount(myAccount,true);
 		
+		theAccountDAO.doWork();
+		
 		//call the membership business method
 		theMembershipDAO.addSillyMember();
 		
+		theMembershipDAO.goToSleep();
 		//close the context
 		context.close();
 	}
