@@ -17,6 +17,8 @@ public class MainDemoApp {
 		MembershipDAO theMembershipDAO = context.getBean("membershipDAO",MembershipDAO.class);
 		
 		Account myAccount = new Account();
+		myAccount.setName("Tanvi");
+		myAccount.setLevel("Silver");
 		//call the business method
 		theAccountDAO.addAccount(myAccount,true);
 		
