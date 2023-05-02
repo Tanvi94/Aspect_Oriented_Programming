@@ -1,0 +1,64 @@
+package com.luv2code.aopdemo.aspect;
+
+import java.util.List;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import com.luv2code.aopdemo.Account;
+
+@Aspect
+@Component
+@Order(2)
+public class MyDemoLoggingAspect {
+	
+	//add new advice for @AfterReturningon the findAccounts method
+	
+	@AfterReturning(
+			pointcut="execution(* com.luv2code.aopdemo.dao.AccountDAO.findAccounts(..))",
+			returning="result")
+	public void afterReturningFindAccountsAdvice(JoinPoint theJoinPoint,List<Account> result) {
+		
+		//print out which method we are advising on
+		String method = theJoinPoint.getSignature().toShortString();
+		System.out.println("\n=====>>> Executing @AfterResturning on method: "+method);
+		
+		//print out the results of the method call
+		System.out.println("Result is: "+result);		
+		
+	}
+	
+	
+	//lets start with an @Before advice
+	@Before("com.luv2code.aopdemo.aspect.LuvAopExpressions.forDaoPackageNoGetterSetter()")
+	public void beforeAddAccountAdvice(JoinPoint theJointPoint) {
+		System.out.println("\n======>>> Execution @Before Advice on method");
+		
+		//display the method signature
+		MethodSignature methoSig = (MethodSignature) theJointPoint.getSignature();
+		System.out.println("Method: "+ methoSig);
+		
+		//display method arguments
+		
+		//get args
+		Object[] args = theJointPoint.getArgs();
+		
+		//loop through args
+		for(Object tempArg: args) {
+			System.out.println(tempArg);
+			if(tempArg instanceof Account) {
+				//downcast and print specific stuff
+				Account theAcc = (Account) tempArg;
+				System.out.println("Account name: "+theAcc.getName());
+				System.out.println("Account level: "+theAcc.getLevel());
+			}
+		}
+	}
+	
+	
+}
